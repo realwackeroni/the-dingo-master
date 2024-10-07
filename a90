@@ -10,7 +10,7 @@ MyGui := Gui(, "")
 MyGui.BackColor := "000001"
 WinSetTransColor("000001", MyGui)
 MyGui.Opt("+AlwaysOnTop -Border -Caption -Disabled +E0x20")
-MyGui.Add("Picture", "x0 y0 h200 w200 vFrame", idle)
+MyGui.Add("Picture", "x0 y0 h400 w400 vFrame", idle)
 MyGui.Show()
 
 ; ----------------------------------------------------------------------------------
@@ -23,24 +23,26 @@ MyGui.Move(XPos, YPos)
 SoundPlay A_ScriptDir "\sfx\a-90-start.wav"
 sleep(500)
 MyGui["Frame"].Value := block
-MyGui.Move((A_ScreenWidth/2)-100, (A_ScreenHeight/2)-100)
-sleep(130)
+MyGui.Move((A_ScreenWidth/2)-200, (A_ScreenHeight/2)-200)
+sleep(200)
 firstCheck := A_PriorKey
+MouseGetPos(&x1,&y1)
 state := GetKeyState("w", "P") GetKeyState("a", "P") GetKeyState("s", "P") GetKeyState("d", "P") GetKeyState("Space", "P") GetKeyState("LButton", "P") GetKeyState("Shift", "P")
-sleep(370)
+sleep(300)
 secondCheck := A_PriorKey
-if (firstCheck != secondCheck) {
+MouseGetPos(&x2,&y2)
+if (firstCheck != secondCheck || x1 != x2 || y1 != y2) {
 	MyGui["Frame"].Value := scare
     SoundPlay A_ScriptDir "\sfx\a-90-death.wav"
     sleep(750)
-    SendInput("{Esc}") sleep(1) SendInput("r") sleep(1) SendInput("{Enter}") ; SendInput(!{F4}) | SendInput("{Esc}") sleep(10) SendInput("r") sleep(10) SendInput("{Enter}")
+    SendInput("{0}") ; SendInput(!{F4}) | SendInput("{Esc}") sleep(10) SendInput("r") sleep(10) SendInput("{Enter}")
     MyGui.Move(A_ScreenWidth*2, A_ScreenHeight)
 	}
 else if (state > 0) {
 MyGui["Frame"].Value := scare
     SoundPlay A_ScriptDir "\sfx\a-90-death.wav"
     sleep(750)
-    SendInput("{Esc}") sleep(1) SendInput("r") sleep(1) SendInput("{Enter}") ; SendInput(!{F4}) | SendInput("{Esc}") sleep(10) SendInput("r") sleep(10) SendInput("{Enter}")
+    SendInput("{0}") ; SendInput(!{F4}) | SendInput("{Esc}") sleep(10) SendInput("r") sleep(10) SendInput("{Enter}")
     MyGui.Move(A_ScreenWidth*2, A_ScreenHeight) ; moves a-90 offscreen (closing and reopening gui interrupts gameplay every time a-90 comes back)
 	}
 else {
@@ -50,7 +52,7 @@ else {
 }
 
 Loop {
-sleepTime := (5000, 40000) ; min/max time for appearing (ms)
+sleepTime := (3000, 3000) ; min/max time for appearing (ms)
 playEntity()
 sleep(sleepTime)
 }
@@ -70,4 +72,3 @@ Suspend
 }
 return
 #SuspendExempt False
-
