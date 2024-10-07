@@ -1,0 +1,74 @@
+#Requires AutoHotkey v2.0-a
+#SingleInstance
+InstallKeybdHook
+KeyHistory 10
+idle := A_ScriptDir "\assets\A-90_IDLE.png"
+block := A_ScriptDir "\assets\A-90_BLOCK.png"
+scare := A_ScriptDir "\assets\A-90_JUMPSCARE.png"
+
+MyGui := Gui(, "")
+MyGui.BackColor := "000001"
+WinSetTransColor("000001", MyGui)
+MyGui.Opt("+AlwaysOnTop -Border -Caption -Disabled +E0x20")
+MyGui.Add("Picture", "x0 y0 h200 w200 vFrame", idle)
+MyGui.Show()
+
+; ----------------------------------------------------------------------------------
+
+playEntity() {
+	MyGui["Frame"].Value := idle
+XPos := Random(0, A_ScreenWidth-200)
+YPos := Random(0, A_ScreenHeight-200)
+MyGui.Move(XPos, YPos)
+SoundPlay A_ScriptDir "\sfx\a-90-start.wav"
+sleep(500)
+MyGui["Frame"].Value := block
+MyGui.Move((A_ScreenWidth/2)-100, (A_ScreenHeight/2)-100)
+sleep(100)
+firstCheck := A_PriorKey
+state := GetKeyState("w", "P") GetKeyState("a", "P") GetKeyState("s", "P") GetKeyState("d", "P") GetKeyState("Space", "P") GetKeyState("LButton", "P") GetKeyState("Shift", "P")
+sleep(400)
+secondCheck := A_PriorKey
+if (firstCheck != secondCheck) {
+	MyGui["Frame"].Value := scare
+    SoundPlay A_ScriptDir "\sfx\a-90-death.wav"
+    sleep(800)
+    SendInput("!{F4}")
+    MyGui.Move(A_ScreenWidth*2, A_ScreenHeight)
+	}
+else if (state > 0) {
+MyGui["Frame"].Value := scare
+    SoundPlay A_ScriptDir "\sfx\a-90-death.wav"
+    sleep(800)
+    SendInput("!{F4}")
+    MyGui.Move(A_ScreenWidth*2, A_ScreenHeight) ; moves a-90 offscreen (closing and reopening gui interrupts gameplay every time a-90 comes back)
+	}
+else {
+	MyGui.Move(A_ScreenWidth*2, A_ScreenHeight) ; moves a-90 offscreen
+	MyGui["Frame"].Value := idle
+	}
+}
+
+
+Loop {
+sleepTime := (15000, 90000) ; min/max time for appearing (ms)
+playEntity()
+sleep(sleepTime)
+}
+
+; LAlt to pause script
+#SuspendExempt
+Pause::
+{
+Pause -1
+}
+
+LAlt::
+{
+SoundBeep(200, 50)
+Pause -1
+Suspend
+}
+return
+#SuspendExempt False
+
