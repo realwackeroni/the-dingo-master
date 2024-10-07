@@ -24,10 +24,10 @@ SoundPlay A_ScriptDir "\sfx\a-90-start.wav"
 sleep(500)
 MyGui["Frame"].Value := block
 MyGui.Move((A_ScreenWidth/2)-100, (A_ScreenHeight/2)-100)
-sleep(100)
+sleep(130)
 firstCheck := A_PriorKey
 state := GetKeyState("w", "P") GetKeyState("a", "P") GetKeyState("s", "P") GetKeyState("d", "P") GetKeyState("Space", "P") GetKeyState("LButton", "P") GetKeyState("Shift", "P")
-sleep(400)
+sleep(370)
 secondCheck := A_PriorKey
 if (firstCheck != secondCheck) {
 	MyGui["Frame"].Value := scare
@@ -70,3 +70,4 @@ Suspend
 }
 return
 #SuspendExempt False
+
