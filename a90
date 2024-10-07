@@ -32,15 +32,15 @@ secondCheck := A_PriorKey
 if (firstCheck != secondCheck) {
 	MyGui["Frame"].Value := scare
     SoundPlay A_ScriptDir "\sfx\a-90-death.wav"
-    sleep(800)
-    SendInput("!{F4}")
+    sleep(750)
+    SendInput("{Esc}") sleep(1) SendInput("r") sleep(1) SendInput("{Enter}") ; SendInput(!{F4}) | SendInput("{Esc}") sleep(10) SendInput("r") sleep(10) SendInput("{Enter}")
     MyGui.Move(A_ScreenWidth*2, A_ScreenHeight)
 	}
 else if (state > 0) {
 MyGui["Frame"].Value := scare
     SoundPlay A_ScriptDir "\sfx\a-90-death.wav"
-    sleep(800)
-    SendInput("!{F4}")
+    sleep(750)
+    SendInput("{Esc}") sleep(1) SendInput("r") sleep(1) SendInput("{Enter}") ; SendInput(!{F4}) | SendInput("{Esc}") sleep(10) SendInput("r") sleep(10) SendInput("{Enter}")
     MyGui.Move(A_ScreenWidth*2, A_ScreenHeight) ; moves a-90 offscreen (closing and reopening gui interrupts gameplay every time a-90 comes back)
 	}
 else {
@@ -49,9 +49,8 @@ else {
 	}
 }
 
-
 Loop {
-sleepTime := (15000, 90000) ; min/max time for appearing (ms)
+sleepTime := (15000, 40000) ; min/max time for appearing (ms)
 playEntity()
 sleep(sleepTime)
 }
@@ -71,4 +70,3 @@ Suspend
 }
 return
 #SuspendExempt False
-
