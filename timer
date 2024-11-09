@@ -1,7 +1,7 @@
 #Requires AutoHotkey v2.0-a
 #SingleInstance
 
-alert := A_ScriptDir "\sfx\botw.wav"
+alert := A_ScriptDir "\sfx\alert.wav"
 IB := InputBox("F3 - start/stop`nF4 = reset timer`nF5 - show/hide GUI`nF6 - reload script`n`nenter time", "timer", "w180 h175")
 if (IB.Value = "") {
 	IB.Value := 10
@@ -33,7 +33,7 @@ countdownTimer() {
 	Global cooldown := "ready"
 	MyGui["Seconds"].Value := cooldown
 	SetTimer(countdownTimer, 0)
-	SoundPlay A_ScriptDir "\sfx\botw.wav"
+	SoundPlay A_ScriptDir "\sfx\alert.wav"
 	}
 }
 
