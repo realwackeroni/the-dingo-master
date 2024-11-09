@@ -1,0 +1,92 @@
+#Requires AutoHotkey v2.0-a
+#SingleInstance
+
+alert := A_ScriptDir "\sfx\botw.wav"
+IB := InputBox("F3 - start/stop`nF4 = reset timer`nF5 - show/hide GUI`nF6 - reload script`n`nenter time", "timer", "w180 h175")
+if (IB.Value = "") {
+	IB.Value := 10
+}
+if (IB.Result = "Cancel") {
+confirm := MsgBox("close script?", "confirm", "OKCancel")
+if confirm = "OK" {
+		ExitApp
+	}
+else {
+	Reload
+	return
+     }
+ }
+cooldown := IB.Value
+MyGui := Gui(, "")
+MyGui.Opt("AlwaysOnTop")
+MyGui.Add("Text",, "cooldown:")
+MyGui.Add("Text", "x+5 w80 vSeconds", cooldown)
+MyGui.Show("w180 h30")
+
+countdownTimer() {
+	if (cooldown > 0) {
+	Global cooldown := cooldown - 1
+	MyGui["Seconds"].Value := cooldown
+	}
+	else
+	{
+	Global cooldown := "ready"
+	MyGui["Seconds"].Value := cooldown
+	SetTimer(countdownTimer, 0)
+	SoundPlay A_ScriptDir "\sfx\botw.wav"
+	}
+}
+
+; start/stop countdown
+F3:: {
+ Static on := False
+ If (on := !on) {
+SetTimer(countdownTimer, 1000)
+SoundPlay A_ScriptDir "\sfx\osu-hit-sound.wav"
+ }
+ Else {
+SetTimer(countdownTimer, 0)
+SoundPlay A_ScriptDir "\sfx\osu-miss-sound.wav"
+}
+}
+
+; reset countdown
+F4:: {
+Global cooldown := IB.Value
+MyGui["Seconds"].Value := cooldown
+SetTimer(countdownTimer, 1000)
+SoundBeep(200, 50)
+}
+
+; reload script (change timer value)
+F6::
+{
+Reload
+Sleep 1000 ; the line below cant run unless error
+Result := MsgBox("epic reload fail just do it manually")
+}
+#SuspendExempt
+Pause::
+{
+Pause -1
+}
+
+F5:: {
+ Static on := False
+ If (on := !on) {
+MyGui.Show("w180 h30")
+ }
+ Else {
+MyGui.Hide()
+}
+}
+
+LAlt::
+{
+SoundBeep(200, 50)
+Pause -1
+Suspend
+}
+return
+#SuspendExempt False
+
